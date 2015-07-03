@@ -57,7 +57,7 @@ $(document).ready(function() {
 });
 
 $(document).ready(function() {
-	#('#message').on("keypress",function(){
+	#('#message').keypress(function(){
 		alertServerOfStartTyping();
 		checkIfUserIsTyping();
 	});
