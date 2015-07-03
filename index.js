@@ -26,10 +26,12 @@ io.on('connection', function(socket){
 	});
 
 	socket.on('user typing', function(){
-		socket.broadcast.emit('user typing', clientSockets[socket.id]);
+		console.log("user started typing");
+		socket.broadcast.emit('user typing');//, clientSockets[socket.id]);
 	});
 
 	socket.on('user done typing', function(){
+		console.log("user done typing");
 		socket.broadcast.emit('user done typing')
 	})
 

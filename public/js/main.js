@@ -1,7 +1,8 @@
 var messageDisplay;
 var nickname;
 var socket = io();
-var typingTimeout;
+var typingTimer;
+var keyspressed = 0;
 
 $(document).ready(function() {
 	
@@ -21,6 +22,9 @@ $(document).ready(function() {
 	$('#submit-button').click(function(e){
 		e.preventDefault();
 
+		clearTimeout(typingTimer);
+		alertServerOfEndTyping();
+
 		//prepare message
 		var payload = {};
 		payload.message = $('#message').val();
@@ -30,7 +34,7 @@ $(document).ready(function() {
 		socket.emit('chat message', payload);
 
 		//display message locally
-		var msg = payload.nickname + ": " + payload.message;
+		var msg = "me: " + payload.message;
 		displayMessage(msg, "", messageDisplay);
 		
 		//clear input box
@@ -57,10 +61,21 @@ $(document).ready(function() {
 });
 
 $(document).ready(function() {
-	// $('#message').keypress(function() {
-	// 	alertServerOfStartTyping();
-	// 	checkIfUserIsTyping();
-	// });
+	$('#message').keyup(function(e) {
+		if (e.keyCode !== 13) {
+			clearTimeout(typingTimer);
+			typingTimer = setTimeout(alertServerOfEndTyping, 400);
+		};		
+	});
+
+	$('#message').keydown(function(e) {
+		if (e.keyCode !== 13) {
+			if (keyspressed === 0) {
+			alertServerOfStartTyping();
+			};
+			clearTimeout(typingTimer);
+		};
+	});
 });
 
 function displayMessage(message, cssClass, destination){
@@ -70,18 +85,16 @@ function displayMessage(message, cssClass, destination){
 	console.log($(destination));
 }
 
-function checkIfUserIsTyping(input, timeout){
-	if(typingTimeout != undefined){
-		clearTimeout(typingTimeout);
-	}
-	typingTimeout = setTimeout(alertServerOfEndTyping, 300);
-}
-
 function alertServerOfStartTyping(){
 	socket.emit('user typing');
+	keyspressed++;
 }
 
 function alertServerOfEndTyping(){
 	socket.emit('user done typing');
+	keyspressed = 0
+}
+
+function displayNotification(){
 
 }
