@@ -1,6 +1,7 @@
-var nickname;
 var messageDisplay;
+var nickname;
 var socket = io();
+var typingTimeout;
 
 $(document).ready(function() {
 	
@@ -55,9 +56,32 @@ $(document).ready(function() {
 	})
 });
 
+$(document).ready(function() {
+	#('#message').onKeyPress = function(){
+		alertServerOfStartTyping();
+		checkIfUserIsTyping();
+	}
+});
+
 function displayMessage(message, cssClass, destination){
 	var li = $('<li></li>');
 	li.addClass(cssClass).text(message);
 	$(destination).append(li);
 	console.log($(destination));
+}
+
+function checkIfUserIsTyping(input, timeout){
+	if(typingTimeout != undefined){
+		clearTimeout(typingTimeout);
+	}
+	typingTimeout = setTimeout(alertServerOfEndTyping, 300);
+}
+
+function alertServerOfStartTyping(){
+	socket.emit('user typing');
+}
+
+function alertServerOfEndTyping(){
+	socket.emit('user done typing');
+
 }

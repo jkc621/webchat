@@ -25,6 +25,14 @@ io.on('connection', function(socket){
 		socket.broadcast.emit('chat message', payload);
 	});
 
+	socket.on('user typing', function(){
+		socket.broadcast.emit('user typing', clientSockets[socket.id]);
+	});
+
+	socket.on('user done typing', function(){
+		socket.broadcast.emit('user done typing')
+	})
+
 	socket.on('disconnect', function(){
 		socket.broadcast.emit('player disconnected', clientSockets[socket.id].participant_name);
 		delete clientSockets[socket.id];
