@@ -57,10 +57,10 @@ $(document).ready(function() {
 });
 
 $(document).ready(function() {
-	#('#message').keypress(function(){
-		alertServerOfStartTyping();
-		checkIfUserIsTyping();
-	});
+	// $('#message').keypress(function() {
+	// 	alertServerOfStartTyping();
+	// 	checkIfUserIsTyping();
+	// });
 });
 
 function displayMessage(message, cssClass, destination){

@@ -6,17 +6,28 @@
 	box-sizing:	border-box;
 }
 
+html, body{
+	height: 100%;
+	margin: 0;
+}
 body{
 	font:13px Helvetica, Arial;
 }
 
-@import url("messages.less");
-@import url("nickname-input.less");
 
 .app-container{
+	display: flex;
+	flex-flow: column;
 	margin: 0 auto;
-	max-width: 640px;
-	height: 100vh;
-	overflow-y: auto;
+	width: 640px;
+	height: 100%;
 	position: relative;
+
+	& > *{
+		flex: 0 1 30px;
+	}
 }
+
+@import url("messages.less");
+@import url("notifications.less");
+@import url("nickname-input.less");

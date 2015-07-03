@@ -10,19 +10,24 @@
 </head>
 <body>
 	<div class="app-container">
-		<ul id="messages">
-			<form action="">
-				<input id="message" autocomplete="off"/>
-				<button id="submit-button" type="submit">Send</button>
-			</form>
-		</ul>
-		<div class="input-nickname">
+		<div class="notification-bar">
+			<div class="notification"></div>			
+		</div>
+		<div class="message-container">
+			<ul id="messages">
+			</ul>			
+		</div>
+		<form class="message-form" action="">
+			<input id="message" autocomplete="off"/>
+			<button id="submit-button" type="submit">Send</button>
+		</form>
+		<!-- <div class="input-nickname">
 			<p>Enter you nickname before you can join the chat.</p>
 			<form action="">
 				<input id="nickname" autocomplete="off"/>
 				<button id="nickname-submit" type="submit">Join Chat</button>			
 			</form>
-		</div>	
+		</div>	 -->
 	</div>
 </body>
 </html>
