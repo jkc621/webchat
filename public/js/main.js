@@ -57,10 +57,10 @@ $(document).ready(function() {
 });
 
 $(document).ready(function() {
-	#('#message').onKeyPress = function(){
+	#('#message').on("keypress",function(){
 		alertServerOfStartTyping();
 		checkIfUserIsTyping();
-	}
+	});
 });
 
 function displayMessage(message, cssClass, destination){
