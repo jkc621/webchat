@@ -22,7 +22,7 @@ io.on('connection', function(socket){
 	});
 
 	socket.on('chat message', function(payload){
-		io.emit('chat message', payload);
+		socket.broadcast.emit('chat message', payload);
 	});
 
 	socket.on('disconnect', function(){
