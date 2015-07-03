@@ -9,7 +9,7 @@ body {
   margin: 0;
 }
 body {
-  font: 13px Helvetica, Arial;
+  font: 13px Ubuntu, Helvetica, Arial;
 }
 .app-container {
   display: -webkit-box;
@@ -97,10 +97,26 @@ body {
   background: #12223d;
 }
 .input-nickname {
+  background: #12223d;
+  color: #ffffff;
   position: absolute;
-  height: 200px;
-  background: #aaaaaa;
-  width: 200px;
+  top: 0;
+  padding: 20px 30px;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+.input-nickname h1 {
+  font-size: 15px;
+  font-weight: bold;
+  margin: 0 0 18px;
+}
+.input-nickname h2 {
+  font-size: 18px;
+  margin: 0 0 7px;
+}
+.input-nickname p {
+  font-size: 16px;
 }
 .hidden {
   display: none;
