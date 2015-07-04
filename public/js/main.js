@@ -1,23 +1,29 @@
 var messageDisplay;
+var notificationDisplay;
 var nickname;
-var socket = io();
+// var socket = io();
+var socket;
 var typingTimer;
 var keyspressed = 0;
 
+//initialization
 $(document).ready(function() {
-	
 	messageDisplay = $("#messages");
+	notificationDisplay = $('.notification-bar');
+	socket = io();	
+});
 
-	socket.on("connect", function(){
-		$("#nickname-submit").on("click",function(e){
-			e.preventDefault();
-			nickname = ($('#nickname').val()).toString();
-			$('.input-nickname').addClass('hidden');
-			socket.emit('player connected', nickname);		
-		});
+//send player nickname
+$(document).ready(function() {
+	$("#nickname-submit").on("click",function(e){
+		e.preventDefault();
+		nickname = ($('#nickname').val()).toString();
+		$('.input-nickname').addClass('hidden');
+		socket.emit('player connected', nickname);		
 	});
 });
 
+//send text message
 $(document).ready(function() {
 	$('#submit-button').click(function(e){
 		e.preventDefault();
@@ -40,26 +46,33 @@ $(document).ready(function() {
 		//clear input box
 		$("#message").val('');
 	});
+});
 
+//new player joined chat
+$(document).ready(function() {
+	socket.on('new member', function(playerName){
+		var msg = playerName + " just joined this chat.";
+		displayNotification(msg, "playerJoinedMessage", notificationDisplay);
+	})
+});
+
+//Receiving new text message
+$(document).ready(function() {
 	socket.on('chat message', function(payload){
 		var msg = payload.nickname + ": " + payload.message;
 		displayMessage(msg, "", messageDisplay);
 	});
-
-	socket.on('new member', function(playerName){
-		console.log(playerName);
-		var msg = playerName + " just joined this chat.";
-		displayMessage(msg, "playerJoinedMessage", messageDisplay);
-	})
 });
 
+//Receive other player disconnections
 $(document).ready(function() {
 	socket.on("player disconnected", function(data){
 		var msg = data + " left the chat.";
-		displayMessage(msg, "playerLeftMessage", messageDisplay);
+		displayNotification(msg, "playerLeftMessage", notificationDisplay);
 	})
 });
 
+//Send events for currently typing and currently not typing
 $(document).ready(function() {
 	$('#message').keyup(function(e) {
 		if (e.keyCode !== 13) {
@@ -82,7 +95,16 @@ function displayMessage(message, cssClass, destination){
 	var li = $('<li></li>');
 	li.addClass(cssClass).text(message);
 	$(destination).append(li);
-	console.log($(destination));
+}
+
+function displayNotification(message, cssClass, destination){
+	var div = $('<div></div>');
+	div.addClass('notification');
+	var p = $('<p></p>');
+	p.addClass(cssClass).text(message);
+	div.append(p);
+	$(destination).empty();
+	$(destination).append(div);
 }
 
 function alertServerOfStartTyping(){
@@ -93,8 +115,4 @@ function alertServerOfStartTyping(){
 function alertServerOfEndTyping(){
 	socket.emit('user done typing');
 	keyspressed = 0
-}
-
-function displayNotification(){
-
 }
