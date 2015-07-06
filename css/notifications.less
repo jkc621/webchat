@@ -1,5 +1,23 @@
 .notification-bar{
 	flex: 0 1 60px;
 	width: 100%;
-	background: @blue-4;
+	background: @blue-2;
+	position: relative;
+	overflow-y: hidden;
+
+	div{
+		background: @blue-4;
+		color: @white;
+		font-size: 18px;
+		margin: 10px 20px;
+		padding: 5px 20px;
+		position: relative;
+		top: 50px;		
+	}
+
+	.notification{
+		top: 0;
+		-webkit-transition: top 5s;
+		transition: top 0.5s;
+	}
 }

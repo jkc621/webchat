@@ -4,10 +4,9 @@ var gulp = require('gulp');
 var less = require('gulp-less');
 var plumber = require('gulp-plumber');
 var reload = browserSync.reload;
-// var concat = require('gulp-concat');
+var concat = require('gulp-concat');
 // var uglify = require('gulp-uglify');
 // var rename = require('gulp-rename');
-// var livereload = require('gulp-livereload');
 
 gulp.task('browser-sync-dev', function(){
 	browserSync({
@@ -18,7 +17,7 @@ gulp.task('browser-sync-dev', function(){
 	});
 	gulp.watch('css/*.less', ['less-dev']);
 	gulp.watch('js/*.js', ['scripts']);
-	gulp.watch("build/*.html").on('change', reload);
+	gulp.watch("*.html").on('change', reload);
 	
 });
 
@@ -33,12 +32,12 @@ gulp.task('less-dev', function() {
         .pipe(reload({stream: true}));
 });
 
-// gulp.task('scripts', function() {
-// 	return gulp.src(['js/libs/*.js','js/*.js'])
-// 	.pipe(plumber())
-// 	.pipe(concat('main.js'))
-// 	.pipe(gulp.dest('build/js/'))
-// 	.pipe(reload({stream: true}));
-// });
+gulp.task('scripts', function() {
+	return gulp.src(['js/libs/*.js','js/*.js'])
+	.pipe(plumber())
+	.pipe(concat('main.js'))
+	.pipe(gulp.dest('public/js/'))
+	.pipe(reload({stream: true}));
+});
 
 gulp.task('default',['browser-sync-dev']);

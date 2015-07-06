@@ -1,7 +1,6 @@
 var messageDisplay;
 var notificationDisplay;
 var nickname;
-// var socket = io();
 var socket;
 var typingTimer;
 var keyspressed = 0;
@@ -52,7 +51,7 @@ $(document).ready(function() {
 $(document).ready(function() {
 	socket.on('new member', function(playerName){
 		var msg = playerName + " just joined this chat.";
-		displayNotification(msg, "playerJoinedMessage", notificationDisplay);
+		displayNotification(msg, "playerJoinedMessage");
 	})
 });
 
@@ -60,15 +59,19 @@ $(document).ready(function() {
 $(document).ready(function() {
 	socket.on('chat message', function(payload){
 		var msg = payload.nickname + ": " + payload.message;
-		displayMessage(msg, "", messageDisplay);
+		displayMessage(msg, "");
 	});
 });
+
+// $(document).ready(function() {
+// 	socket.on('user started)
+// });
 
 //Receive other player disconnections
 $(document).ready(function() {
 	socket.on("player disconnected", function(data){
 		var msg = data + " left the chat.";
-		displayNotification(msg, "playerLeftMessage", notificationDisplay);
+		displayNotification(msg, "playerLeftMessage");
 	})
 });
 
@@ -91,20 +94,22 @@ $(document).ready(function() {
 	});
 });
 
-function displayMessage(message, cssClass, destination){
+function displayMessage(message, cssClass){
 	var li = $('<li></li>');
 	li.addClass(cssClass).text(message);
-	$(destination).append(li);
+	$(messageDisplay).append(li);
 }
 
-function displayNotification(message, cssClass, destination){
+function displayNotification(message, cssClass){
 	var div = $('<div></div>');
-	div.addClass('notification');
 	var p = $('<p></p>');
 	p.addClass(cssClass).text(message);
 	div.append(p);
-	$(destination).empty();
-	$(destination).append(div);
+	$(notificationDisplay).empty();
+	$(notificationDisplay).append(div);
+	setTimeout(function(){
+		div.addClass('notification');		
+	}, 200);
 }
 
 function alertServerOfStartTyping(){
