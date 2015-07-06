@@ -17,6 +17,7 @@ $(document).ready(function() {
 	$("#nickname-submit").on("click",function(e){
 		e.preventDefault();
 		nickname = ($('#nickname').val()).toString();
+		clearNotifications();
 		$('.input-nickname').addClass('hidden');
 		socket.emit('player connected', nickname);		
 	});
@@ -47,7 +48,7 @@ $(document).ready(function() {
 	});
 });
 
-//new player joined chat
+//Receive new player joined chat
 $(document).ready(function() {
 	socket.on('new member', function(playerName){
 		var msg = playerName + " just joined this chat.";
@@ -55,17 +56,25 @@ $(document).ready(function() {
 	})
 });
 
-//Receiving new text message
+//Receive currently typing and not typing
+$(document).ready(function() {
+	socket.on('user typing', function(data){
+		var msg = data + " is typing."
+		displayNotification(msg);
+	});
+
+	socket.on('user done typing', function(data){
+		clearNotifications();
+	});
+});
+
+//Receive new text message
 $(document).ready(function() {
 	socket.on('chat message', function(payload){
 		var msg = payload.nickname + ": " + payload.message;
 		displayMessage(msg, "");
 	});
 });
-
-// $(document).ready(function() {
-// 	socket.on('user started)
-// });
 
 //Receive other player disconnections
 $(document).ready(function() {
@@ -102,14 +111,17 @@ function displayMessage(message, cssClass){
 
 function displayNotification(message, cssClass){
 	var div = $('<div></div>');
-	var p = $('<p></p>');
-	p.addClass(cssClass).text(message);
+	var p = $('<p></p>').addClass(cssClass).text(message);
 	div.append(p);
-	$(notificationDisplay).empty();
+	clearNotifications();
 	$(notificationDisplay).append(div);
 	setTimeout(function(){
 		div.addClass('notification');		
 	}, 200);
+}
+
+function clearNotifications(){
+	$('.notification').remove();
 }
 
 function alertServerOfStartTyping(){

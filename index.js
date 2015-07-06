@@ -19,6 +19,8 @@ io.on('connection', function(socket){
 	socket.on('player connected', function(data){
 		clientSockets[socket.id].participant_name = data;
 		socket.broadcast.emit('new member', data);
+		console.log(clientSockets);
+		console.log('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx');
 	});
 
 	socket.on('chat message', function(payload){
@@ -27,7 +29,7 @@ io.on('connection', function(socket){
 
 	socket.on('user typing', function(){
 		console.log("user started typing");
-		socket.broadcast.emit('user typing');//, clientSockets[socket.id]);
+		socket.broadcast.emit('user typing', clientSockets[socket.id].participant_name);
 	});
 
 	socket.on('user done typing', function(){
