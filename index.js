@@ -13,39 +13,55 @@ app.get("/", function(req, res){
 io.on('connection', function(socket){
 	clientSockets[socket.id] = {
 		socket: socket,
-		participant_name: ""
+		nickname: ""
 	};
 
-	socket.on('player connected', function(data){
-		clientSockets[socket.id].participant_name = data;
+	socket.on('player connected', function(nickname){
+		clientSockets[socket.id].nickname = nickname;
+		var data = {
+			id: socket.id,
+			nickname: nickname
+		};
 		socket.broadcast.emit('new member', data);
-		console.log(clientSockets);
-		console.log('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx');
 	});
 
-	socket.on('chat message', function(payload){
-		socket.broadcast.emit('chat message', payload);
+	socket.on('chat message', function(m){
+		var data = {
+			id: socket.id,
+			nickname: clientSockets[socket.id].nickname ? clientSockets[socket.id].nickname : m.nickname,
+			message: m.message
+		};
+		socket.broadcast.emit('chat message', data);
+	});
+
+	socket.on('update players', function(){
+		console.log("update player called from client");
+		var data = {};
+		for(var client in clientSockets){
+			data[clientSockets[client].socket.id] = {
+				id: clientSockets[client].socket.id,
+				nickname: clientSockets[client].nickname
+			};
+		}
+		console.log(data);
+		socket.emit('update players reply', data);
 	});
 
 	socket.on('user typing', function(){
-		console.log("user started typing");
-		socket.broadcast.emit('user typing', clientSockets[socket.id].participant_name);
+		socket.broadcast.emit('user typing', clientSockets[socket.id].nickname);
 	});
 
 	socket.on('user done typing', function(){
-		console.log("user done typing");
-		socket.broadcast.emit('user done typing')
-	})
+		socket.broadcast.emit('user done typing');
+	});
 
 	socket.on('disconnect', function(){
-		socket.broadcast.emit('player disconnected', clientSockets[socket.id].participant_name);
+		socket.broadcast.emit('player disconnected', clientSockets[socket.id].nickname);
 		delete clientSockets[socket.id];
 	});
 });
 
-io.on
-
 http.listen(3000, function(){
 	console.log('listening on *:3000');
-})
+});
 
