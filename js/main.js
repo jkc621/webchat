@@ -93,6 +93,7 @@ $(document).ready(function() {
 	socket.on('user typing', function(data){
 		var msg = data + " is typing.";
 		displayNotification(msg);
+		setTimeout(clearNotifications, 5000);
 	});
 
 	socket.on('user done typing', function(data){

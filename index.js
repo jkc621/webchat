@@ -35,14 +35,7 @@ io.on('connection', function(socket){
 	});
 
 	socket.on('update players', function(){
-		console.log("update player called from client");
-		var data = {};
-		for(var client in clientSockets){
-			data[clientSockets[client].socket.id] = {
-				id: clientSockets[client].socket.id,
-				nickname: clientSockets[client].nickname
-			};
-		}
+		var data = generateCurrentPlayers(clientSockets);
 		console.log(data);
 		socket.emit('update players reply', data);
 	});
@@ -58,6 +51,8 @@ io.on('connection', function(socket){
 	socket.on('disconnect', function(){
 		socket.broadcast.emit('player disconnected', clientSockets[socket.id].nickname);
 		delete clientSockets[socket.id];
+		var data = generateCurrentPlayers(clientSockets);
+		socket.emit('update players reply', data);		 
 	});
 });
 
@@ -65,3 +60,13 @@ http.listen(3000, function(){
 	console.log('listening on *:3000');
 });
 
+function generateCurrentPlayers(clientSocketsObject){
+	var data = {};
+	for(var client in clientSocketsObject){
+		data[clientSocketsObject[client].socket.id] = {
+			id: clientSocketsObject[client].socket.id,
+			nickname: clientSocketsObject[client].nickname
+		};
+	}
+	return data;
+}
