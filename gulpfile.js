@@ -11,7 +11,7 @@ var concat = require('gulp-concat');
 gulp.task('browser-sync-dev', function(){
 	browserSync({
 		// server:{
-		// 	baseDir:"./build"
+		// 	baseDir:"."
 		// }
 		proxy: "localhost:3000"
 	});

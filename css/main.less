@@ -1,34 +1,36 @@
 @import (reference) "colors.less";
 
 * {
+	box-sizing:	border-box;
 	margin: 0;
 	padding: 0;
-	box-sizing:	border-box;
 }
 
 html, body{
 	height: 100%;
 	margin: 0;
 }
+
 body{
+	background: @blue-5;
+	background: linear-gradient(to bottom, @blue-5 0, @blue-5 60px, @blue-3 60px, @blue-3 100%);
 	font:13px Ubuntu, Helvetica, Arial;
 }
-
 
 .app-container{
 	display: flex;
 	flex-flow: column;
-	margin: 0 auto;
-	max-width: 640px;
-	min-width: 300px;
+	float: left;
 	height: 100%;
 	position: relative;
+	width: 640px;
 
 	& > *{
 		flex: 0 1 30px;
 	}
 }
 
+@import url("info-container.less");
 @import url("messages.less");
 @import url("notifications.less");
 @import url("nickname-input.less");
